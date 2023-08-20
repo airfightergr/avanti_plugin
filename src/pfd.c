@@ -1,18 +1,29 @@
 //
 // Created by ilias on 6/25/23.
 //
-
+#if APL
+#if defined(_MACH_)
+#include <Carbon/Carbon.h>
+#endif
+#endif
+#if IBM
+#include <windows.h>
+#endif
 #include <stdbool.h>
 
+#include "XPLMUtilities.h"
+#include "XPLMGraphics.h"
 #include "XPLMDataAccess.h"
 #include "XPLMDisplay.h"
 
 #include "pfd.h"
-#include "acfutils/glew.h"
+#include <acfutils/glew.h>
+#include "acfutils/assert.h"
 #include "acfutils/core.h"
 #include "acfutils/helpers.h"
 #include "acfutils/log.h"
 #include "acfutils/mt_cairo_render.h"
+#include "acfutils/sysmacros.h"
 
 #define PANEL_X 0 //(575)
 #define PANEL_Y 0 //(442)

@@ -46,18 +46,16 @@ add_library(avanti SHARED src/avanti.c
         src/pfd.c src/pfd.h
         src/avanti.h
         src/file_io.h src/file_io.c
-        src/avanti_gui.cpp src/avanti_gui.h
-        src/avanti_gui.cpp
+#        src/avanti_gui.cpp src/avanti_gui.h
 )
 
 target_compile_options(avanti PUBLIC -Wall -Wextra )
-#target_link_libraries(avanti PUBLIC ${LIBACFUTILS_LIBS} )
-#target_link_libraries(avanti PUBLIC ${LIBACFUTILS_LIBS} ${OPENGL_LIBRARIES})
+target_link_libraries(avanti PUBLIC ${LIBACFUTILS_LIBS} ${OPENGL_LIBRARIES})
 
 # Link library for dynamic loading of shared objects on UNIX systems.
 if (UNIX)
     find_library(DL_LIBRARY dl)
-    target_link_libraries(avanti PUBLIC ${LIBACFUTILS_LIBS} ${OPENGL_LIBRARIES} ${DL_LIBRARY} )
+#    target_link_libraries(avanti PUBLIC ${LIBACFUTILS_LIBS} ${OPENGL_LIBRARIES} ${DL_LIBRARY} )
 endif ()
 
 if(APPLE)
@@ -77,10 +75,6 @@ elseif(WIN32)
 else()
     add_definitions(-DAPL=0 -DIBM=0 -DLIN=1)
     set(ARCH "lin64")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -static-libgcc")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++")
-    set(CMAKE_SHARED_LIBRARY_LINK_C_FLAGS "${CMAKE_SHARED_LIBRARY_LINK_C_FLAGS} -static-libgcc -s")
-    set(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS "${CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS}  -static-libgcc -static-libstdc++ -s")
 endif()
 
 set_target_properties(avanti PROPERTIES PREFIX "")

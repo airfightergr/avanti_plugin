@@ -9,7 +9,7 @@
 extern "C" {
 #endif
 
-int DrawImGui();
+void DrawImGui(XPLMDrawCallback_f inCallback, XPLMDrawingPhase inPhase, int inIsBefore, void *inRefcon);
 void StartImGui();
 void DestroyImGui();
 

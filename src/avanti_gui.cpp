@@ -16,6 +16,12 @@
 #include "avanti_gui.h"
 
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 /// ImGui Initialize call
 void StartImGui()
 {
@@ -54,3 +60,6 @@ void DestroyImGui()
 
 //}
 
+#ifdef __cplusplus
+}
+#endif //__cplusplus

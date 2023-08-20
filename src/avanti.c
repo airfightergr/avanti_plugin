@@ -20,7 +20,15 @@ Scope to understand how work with c/c++ and produce a working plugin for X-Plane
 #include "XPLMUtilities.h"
 #include "XPLMDisplay.h"
 
-
+// include main header file
+#include "acfutils/log.h"
+#include "acfutils/glew.h"
+#include "acfutils/core.h"
+#include "acfutils/helpers.h"
+#include "acfutils/mt_cairo_render.h"
+#include "units_conv.h"
+#include "pfd.h"
+#include "avanti_gui.h"
 
 #if IBM
 #include <windows.h>
@@ -37,11 +45,7 @@ Scope to understand how work with c/c++ and produce a working plugin for X-Plane
 #endif
 
 
-// include main header file
-#include "acfutils/log.h"
-#include "units_conv.h"
-#include "pfd.h"
-#include "avanti_gui.h"
+
 
 
 // Log buffer
