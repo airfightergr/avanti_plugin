@@ -21,31 +21,12 @@ Scope to understand how work with c/c++ and produce a working plugin for X-Plane
 #include "XPLMDisplay.h"
 
 // include main header file
-#include "acfutils/log.h"
-#include "acfutils/glew.h"
-#include "acfutils/core.h"
-#include "acfutils/helpers.h"
-#include "acfutils/mt_cairo_render.h"
+//#include "acfutils/log.h"
 #include "units_conv.h"
-#include "pfd.h"
-#include "avanti_gui.h"
-
-#if IBM
-#include <windows.h>
-#endif
-#if LIN
-#include <GL/glew.h>
-#include <GL/gl.h>
-#endif
-#if __GNUC__ && APL
-#include <OpenGL/gl.h>
-#endif
-#if __GNUC__ && IBM
-#include <GL/gl.h>
-#endif
-
-
-
+//#include "pfd.h"
+#include "file_io.h"
+//#include "avanti.h"
+//#include "avanti_gui.h"
 
 
 // Log buffer
@@ -74,6 +55,22 @@ float   getAltVal(void* inRefcon);
 void    setAltVal(void* inRefcon, float outValue);
 
 time_t now = 0;
+
+#if IBM
+#include <windows.h>
+#endif
+#if LIN
+#include <GL/glew.h>
+#include <GL/gl.h>
+#endif
+#if __GNUC__ && APL
+#include <OpenGL/gl.h>
+#endif
+#if __GNUC__ && IBM
+#include <GL/gl.h>
+#endif
+
+
 
 
 /* This will be your custom logging function */
@@ -137,17 +134,17 @@ PLUGIN_API int XPluginStart(
     units_conv_init();
 
     // init drawing
-    drawing_init();
+//    drawing_init();
 
     // init imgui
-    XPLMRegisterDrawCallback((XPLMDrawCallback_f) DrawImGui, xplm_Phase_Window, 0, NULL);
+//    XPLMRegisterDrawCallback((XPLMDrawCallback_f) DrawImGui, xplm_Phase_Window, 0, NULL);
 //    ImGui_Start();
 
     // init command to open manual page
     OpenLink = XPLMCreateCommand("avanti/cmd/openLink", "Open Web Page");
     XPLMRegisterCommandHandler(OpenLink, OpenLinkHandler, 1, (void *) 0);
 
-    log_init(my_dbg_logger, "[ACF UTILS LOG]: ");
+//    log_init(my_dbg_logger, "[ACF UTILS LOG]: ");
 
 if (PluginID != XPLM_NO_PLUGIN_ID)
 {
@@ -167,15 +164,15 @@ PLUGIN_API void XPluginStop(void)
     XPLMUnregisterCommandHandler(OpenLink, OpenLinkHandler, 0, 0);
     //      XPLMUnregisterFlightLoopCallback(calc_altimeter,  NULL);
     // Unregister acfutils logging
-    log_fini();
+//    log_fini();
     
     // uregister drawing
-    drawing_disable();
+//    drawing_disable();
 
     // unregister OpenGL drawing
 //    texture_fini();
 
-    DestroyImGui();
+//    DestroyImGui();
 
 }
 
@@ -183,9 +180,9 @@ PLUGIN_API void XPluginStop(void)
 PLUGIN_API int XPluginEnable(void)
 {
 
-    drawing_enable();
+//    drawing_enable();
 
-    StartImGui();
+//    StartImGui();
 
     return 1;
 }
@@ -195,7 +192,7 @@ PLUGIN_API void XPluginDisable(void)
 {
 //     XPLMUnregisterFlightLoopCallback(calc_altimeter, NULL);	 //  Don't forget to unload this callback.
 
-    DestroyImGui();
+//    DestroyImGui();
 
 }
 
@@ -246,7 +243,7 @@ float myTimer(float elapsedMe, float elapsedSim, int counter, void * refcon)
     {
         snprintf(myValue_buffer, 256, "[P-180 Avanti II]: Passed 100 ft!\n");
         XPLMDebugString(myValue_buffer);
-        logMsg("Passed 100 ft!");
+//        logMsg("Passed 100 ft!");
     }
     altPrev = altNow;
 
@@ -261,7 +258,8 @@ int OpenLinkHandler(XPLMCommandRef inCommand, XPLMCommandPhase inPhase, void * i
         system("open https://airfightergr.github.io/les_dc3_docs");
         sprintf(logbuff, "Open Link has been pressed\n");
         XPLMDebugString(logbuff);
-        logMsg("Linked opened!");
+        appendLog();
+//        logMsg("Linked opened!");
     }
 
     return 0;

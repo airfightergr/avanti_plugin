@@ -1,29 +1,34 @@
 //
 // Created by ilias on 6/25/23.
 //
-#if APL
-#if defined(_MACH_)
-#include <Carbon/Carbon.h>
-#endif
-#endif
-#if IBM
-#include <windows.h>
-#endif
+
+#include <string.h>
 #include <stdbool.h>
 
-#include "XPLMUtilities.h"
-#include "XPLMGraphics.h"
-#include "XPLMDataAccess.h"
-#include "XPLMDisplay.h"
+#include <XPLMUtilities.h>
+#include <XPLMGraphics.h>
+#include <XPLMDataAccess.h>
+#include <XPLMDisplay.h>
+
+
+#include <acfutils/glew.h>
+#include <acfutils/log.h>
+#include <acfutils/mt_cairo_render.h>
+#include "acfutils/assert.h"
+#include <acfutils/core.h>
+#include <acfutils/helpers.h>
+#include <acfutils/sysmacros.h>
 
 #include "pfd.h"
-#include <acfutils/glew.h>
-#include "acfutils/assert.h"
-#include "acfutils/core.h"
-#include "acfutils/helpers.h"
-#include "acfutils/log.h"
-#include "acfutils/mt_cairo_render.h"
-#include "acfutils/sysmacros.h"
+
+//#if APL
+//#if defined(_MACH_)
+//#include <Carbon/Carbon.h>
+//#endif
+//#endif
+//#if IBM
+//#include <windows.h>
+//#endif
 
 #define PANEL_X 0 //(575)
 #define PANEL_Y 0 //(442)
@@ -43,7 +48,7 @@ const char *acf_path = acf_dir_path;
 
 // The cairo drawing callback. This is called in the background thread by
 // mt_cairo_render_t.
-void display_render_cb(cairo_t *cr, unsigned w, unsigned h, void *data) {
+static void display_render_cb(cairo_t *cr, unsigned w, unsigned h, void *data) {
     // In a real use scenario, this would be a pointer to whatever data you need to
     // have for drawing. Here, we don't *really* care
     UNUSED(data);
@@ -61,8 +66,8 @@ void display_render_cb(cairo_t *cr, unsigned w, unsigned h, void *data) {
     cairo_arc(cr, 63 + (w/2), 70 + (h/2), 350, 0, 2 * M_PI); //arc
     cairo_stroke(cr);   // use this to paint the arc. If not, will be connected to the next one, by a line
 
-//    // draw another one?
-//    cairo_set_source_rgb(cr, 1.0, 0.4, 1.0);
+    // draw another one?
+    cairo_set_source_rgb(cr, 1.0, 0.4, 1.0);
     cairo_arc(cr, 63 + (w/2), 70 + (h/2), 175, 0.0f, 2 * M_PI);     //angles in randians
     cairo_stroke(cr);
 
@@ -75,7 +80,7 @@ void display_render_cb(cairo_t *cr, unsigned w, unsigned h, void *data) {
 //
 // You do not have to have a draw loop -- you could for example draw on a window (using the
 // window's draw callback)
-int draw_loop(XPLMDrawingPhase phase, int is_before, void *refcon) {
+static int draw_loop(XPLMDrawingPhase phase, int is_before, void *refcon) {
     UNUSED(phase);
     UNUSED(is_before);
     UNUSED(refcon);
@@ -127,3 +132,9 @@ void drawing_disable(void)
 }
 
 
+void drawing_receiveMessage(void)
+{
+//    UNUSED(from);
+//    UNUSED(msg);
+//    UNUSED(param);
+}

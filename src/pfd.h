@@ -5,13 +5,13 @@
 #ifndef AVANTI_PFD_H
 #define AVANTI_PFD_H
 
-#include "cairo.h"
 
-void drawing_init();
+void drawing_init(void);
 void drawing_enable(void);
 void drawing_disable(void);
-void display_render_cb(cairo_t *cr, unsigned w, unsigned h, void *data);
-int draw_loop(XPLMDrawingPhase phase, int is_before, void *refcon);
+static void display_render_cb(cairo_t *cr, unsigned w, unsigned h, void *data);
+static int draw_loop(XPLMDrawingPhase phase, int is_before, void *refcon);
+void drawing_receiveMessage(void);
 
 extern char acf_dir_path[1024];
 
