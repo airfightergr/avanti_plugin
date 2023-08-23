@@ -23,11 +23,11 @@ Scope to understand how work with c/c++ and produce a working plugin for X-Plane
 // include main header file
 //#include "acfutils/log.h"
 #include "units_conv.h"
-//#include "pfd.h"
+#include "pfd.h"
 #include "file_io.h"
 //#include "avanti.h"
 //#include "avanti_gui.h"
-
+#include <acfutils/log.h>
 
 // Log buffer
 char myValue_buffer[256];
@@ -134,7 +134,7 @@ PLUGIN_API int XPluginStart(
     units_conv_init();
 
     // init drawing
-//    drawing_init();
+    drawing_init();
 
     // init imgui
 //    XPLMRegisterDrawCallback((XPLMDrawCallback_f) DrawImGui, xplm_Phase_Window, 0, NULL);
@@ -144,7 +144,7 @@ PLUGIN_API int XPluginStart(
     OpenLink = XPLMCreateCommand("avanti/cmd/openLink", "Open Web Page");
     XPLMRegisterCommandHandler(OpenLink, OpenLinkHandler, 1, (void *) 0);
 
-//    log_init(my_dbg_logger, "[ACF UTILS LOG]: ");
+    log_init(my_dbg_logger, "[ACF UTILS LOG]: ");
 
 if (PluginID != XPLM_NO_PLUGIN_ID)
 {
@@ -164,10 +164,10 @@ PLUGIN_API void XPluginStop(void)
     XPLMUnregisterCommandHandler(OpenLink, OpenLinkHandler, 0, 0);
     //      XPLMUnregisterFlightLoopCallback(calc_altimeter,  NULL);
     // Unregister acfutils logging
-//    log_fini();
+    log_fini();
     
     // uregister drawing
-//    drawing_disable();
+    drawing_disable();
 
     // unregister OpenGL drawing
 //    texture_fini();
@@ -180,7 +180,7 @@ PLUGIN_API void XPluginStop(void)
 PLUGIN_API int XPluginEnable(void)
 {
 
-//    drawing_enable();
+    drawing_enable();
 
 //    StartImGui();
 
@@ -243,7 +243,7 @@ float myTimer(float elapsedMe, float elapsedSim, int counter, void * refcon)
     {
         snprintf(myValue_buffer, 256, "[P-180 Avanti II]: Passed 100 ft!\n");
         XPLMDebugString(myValue_buffer);
-//        logMsg("Passed 100 ft!");
+        logMsg("Passed 100 ft!");
     }
     altPrev = altNow;
 
@@ -258,8 +258,8 @@ int OpenLinkHandler(XPLMCommandRef inCommand, XPLMCommandPhase inPhase, void * i
         system("open https://airfightergr.github.io/les_dc3_docs");
         sprintf(logbuff, "Open Link has been pressed\n");
         XPLMDebugString(logbuff);
-        appendLog();
-//        logMsg("Linked opened!");
+//        appendLog();
+        logMsg("Linked opened!");
     }
 
     return 0;

@@ -15,7 +15,7 @@ endif ()
 # language(s) standard
 set(CMAKE_C_STANDARD 11)
 
-file(GLOB LIBACFUTILS_LIBS libacfutils/lin64/lib/*.a)
+file(GLOB LIBACFUTILS_LIBS libacfutils-redist/lin64/lib/*.a)
 if(WIN32)
     list(APPEND LIBACFUTILS_LIBS crypt32 ws2_32 gdi32 dbghelp psapi winmm)
 else()
@@ -98,7 +98,7 @@ endif ()
 # Link library for dynamic loading of shared objects on UNIX systems.
 if (UNIX)
     find_library(DL_LIBRARY dl)
-    target_link_libraries(avanti PUBLIC ${LIBACFUTILS_LIBS} ${OPENGL_LIBRARIES} ${DL_LIBRARY})
+    target_link_libraries(avanti ${DL_LIBRARY})
 endif ()
 
 # Link OS X core system libraries.
@@ -109,8 +109,8 @@ if (APPLE)
     find_library(OpenGL_LIBRARY OpenGL)
     find_library(Cocoa_LIBRARY Cocoa)
 
-    target_link_libraries(plugin ${IOKIT_LIBRARY} ${CORE_FOUNDATION_LIBRARY} ${GLUT_LIBRARY})
-    target_link_libraries(plugin ${OpenGL_LIBRARY} ${Cocoa_LIBRARY})
+    target_link_libraries(avanti ${IOKIT_LIBRARY} ${CORE_FOUNDATION_LIBRARY} ${GLUT_LIBRARY})
+    target_link_libraries(avanti ${OpenGL_LIBRARY} ${Cocoa_LIBRARY})
 endif ()
 
 if (WIN32)
@@ -130,7 +130,8 @@ elseif (UNIX)
     # Restrict set of symbols exported from the plugin. This reduces changes of
     # conflict with other plugins, in particular ones with Lua interpreter
     # embedded.
-    target_link_libraries(avanti PUBLIC -Wl,--version-script -Wl,"${CMAKE_SOURCE_DIR}/src/exports.txt")
+    target_link_libraries(avanti -Wl,--version-script -Wl,"${CMAKE_SOURCE_DIR}/src/exports.txt")
+    target_link_libraries(avanti ${LIBACFUTILS_LIBS})
 endif ()
 
 set(CMAKE_BUILD_TYPE RelWithDebInfo)

@@ -5,6 +5,8 @@
 #ifndef AVANTI_PFD_H
 #define AVANTI_PFD_H
 
+#include <acfutils/mt_cairo_render.h>
+
 
 void drawing_init(void);
 void drawing_enable(void);
