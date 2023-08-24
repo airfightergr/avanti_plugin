@@ -45,6 +45,8 @@ static XPLMDataRef acf_path_dref = NULL;
 char acf_dir_path[1024] = {0};
 const char *acf_path = acf_dir_path;
 
+// HDG dataref
+static XPLMDataRef plt_hdg_ahars;
 
 // The cairo drawing callback. This is called in the background thread by
 // mt_cairo_render_t.
@@ -74,6 +76,21 @@ static void display_render_cb(cairo_t *cr, unsigned w, unsigned h, void *data) {
     cairo_move_to(cr, 575, 419); // move to the center of the rose on x->
     cairo_line_to(cr, 575, 395);
     cairo_stroke(cr);
+
+    cairo_select_font_face(cr, "Sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL);
+    cairo_set_font_size(cr, 55.0);
+
+    cairo_text_extents_t extents;   // init extents, the width of the text
+
+    int hdg = (int) XPLMGetDataf(plt_hdg_ahars); // read the heading (float) and cast it to int
+    char headg[4];
+    snprintf(headg, 4,  "%03d", hdg);
+
+    cairo_text_extents(cr, headg, &extents);    // find the width and store to extents
+
+    cairo_move_to(cr, 575 - extents.width/2, 200);
+    cairo_text_path(cr, headg);
+    cairo_fill(cr);
 }
 
 // Here we draw the cairo-generated image onto the panel texture.
@@ -94,7 +111,7 @@ static int draw_loop(XPLMDrawingPhase phase, int is_before, void *refcon) {
 }
 
 
-void drawing_init()
+void drawing_init(void)
 {
     glewInit();
     mt_cairo_render_glob_init(false);
@@ -121,6 +138,9 @@ void drawing_enable(void)
     char *path = mkpathname(acf_dir_path, &log_path, NULL);
 
     logMsg("Aircraft Path: %s", acf_dir_path);
+
+    // get hdg dref
+    plt_hdg_ahars = XPLMFindDataRef("sim/cockpit2/gauges/indicators/heading_AHARS_deg_mag_pilot");
 }
 
 
